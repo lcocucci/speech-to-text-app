@@ -1,0 +1,19 @@
+.venv
+venv
+
+# Excluir archivos de configuración del sistema
+.anima
+.idea
+.vscode
+
+# Excluir archivos de compilación
+*.pyc
+__pycache__/
+
+# Excluir directorios de samples y sus archivos
+app/src/samples/audio/*
+app/src/samples/transcriptions/*
+
+# Incluir el archivo .gitkeep para que los directorios vacíos sean trackeados
+!app/src/samples/audio/.gitkeep
+!app/src/samples/transcriptions/.gitkeep
