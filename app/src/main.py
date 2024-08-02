@@ -1,7 +1,9 @@
-import whisper
+from fastapi import FastAPI
+from apis.stt_api import router
+    
+app = FastAPI()
+app.include_router(router, prefix='/api', tags=['stt'])
 
-model = whisper.load_model('base')
-transcription = model.transcribe(r'app\src\samples\audio\ElevenLabs_Valeria_test.mp3')
-
-with open(r'app\src\samples\transcriptions\transcription.txt', 'w') as f:
-    f.write(transcription['text'])
+@app.get('/')
+def root():
+    return {'msg': 'Welcome to FastAPI :)'}

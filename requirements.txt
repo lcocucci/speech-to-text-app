@@ -1,4 +1,7 @@
 openai
 openai-whisper
 torch
+numpy==1.26.4
+fastapi
+uvicorn
 # speech_recognition
