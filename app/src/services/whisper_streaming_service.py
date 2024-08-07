@@ -2,6 +2,9 @@ import whisper
 import pyaudio
 import numpy as np
 from threading import Thread
+from datetime import datetime
+
+now = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 
 def stt_whisper_streaming():
     # Inicializar el modelo de Whisper
@@ -53,3 +56,15 @@ def stt_whisper_streaming():
         stream.stop_stream()
         stream.close()
         p.terminate()
+        
+# Transcripción en Streaming que se procesa como un archivo de audio
+def stt_whisper_streaming_af(audiofile: str):
+    model = whisper.load_model('base')
+    transcription = model.transcribe(audiofile)
+    
+    with open(f'app\\src\\samples\\transcriptions\\stt-staf-{now}.wav', 'w') as f:
+        f.write(transcription['text'])
+    
+# Transcripción en Streaming que va procesando pequeños fragmentos en tiempo real
+def stt_whisper_streaming_chunks():
+    ...

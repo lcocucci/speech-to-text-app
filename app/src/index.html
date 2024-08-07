@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Audio Upload</title>
+  </head>
+  <body>
+    <h1>Upload Audio File</h1>
+    <button onclick="startRecording()">Start Recording</button>
+    <button onclick="stopRecording()">Stop Recording</button>
+    <ul id="messages"></ul>
+    <script>
+      let ws;
+      let mediaRecorder;
+      let audioChunks = [];
+
+      function startRecording() {
+        ws = new WebSocket('ws://127.0.0.1:8000/ws');
+
+        ws.onopen = function () {
+          console.log('WebSocket connection opened');
+        };
+
+        ws.onmessage = function (event) {
+          const messages = document.getElementById('messages');
+          const message = document.createElement('li');
+          const content = document.createTextNode(event.data);
+          message.appendChild(content);
+          messages.appendChild(message);
+        };
+
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+          audioChunks = []; // Reiniciar los fragmentos de audio
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+
+          mediaRecorder.addEventListener('dataavailable', (event) => {
+            audioChunks.push(event.data);
+          });
+        });
+      }
+
+      function stopRecording() {
+        mediaRecorder.stop();
+
+        mediaRecorder.addEventListener('stop', () => {
+          const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          const fileReader = new FileReader();
+
+          fileReader.onloadend = function () {
+            // Verificar que la conexión esté abierta antes de enviar
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(fileReader.result);
+            } else {
+              console.error('WebSocket connection is not open');
+            }
+          };
+
+          fileReader.readAsArrayBuffer(audioBlob);
+        });
+      }
+    </script>
+  </body>
+</html>
