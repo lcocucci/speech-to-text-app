@@ -7,6 +7,6 @@ def stt_whisper_audiofile(audiofile: str):
     transcription = model.transcribe(audiofile)
 
     now = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
-    with open(f'app\\src\\samples\\transcriptions\\stt-wl-{now}.txt', 'w') as f:
+    with open(f'app\\src\\samples\\transcriptions\\stt-wl-{now}.txt', 'w', encoding='utf-8') as f:
         f.write(transcription['text'])
         

@@ -2,7 +2,7 @@ from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 from .apis.stt_api import router
 from datetime import datetime
-from .services.whisper_audiofile_service import stt_whisper_audiofile
+from .services.whisper_streaming_service import stt_whisper_streaming_af
     
 app = FastAPI()
 app.include_router(router, prefix='/api', tags=['stt'])
@@ -26,6 +26,6 @@ async def websocket_endpoint(ws: WebSocket):
             f.write(data)
         print('Archivo de audio recibido y guardado')
         await ws.send_text('Archivo de audio guardado')
-        stt_whisper_audiofile(file_path)
+        stt_whisper_streaming_af(file_path)
         print('Transcripción Completada :)')
         
