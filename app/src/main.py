@@ -1,8 +1,11 @@
+import os
+# Permitir la duplicación de la biblioteca OpenMP
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 from .apis.stt_api import router
 from datetime import datetime
-from .services.whisper_streaming_service import stt_whisper_streaming_af
+from .services.whisper_streaming_service import stt_faster_whisper
     
 app = FastAPI()
 app.include_router(router, prefix='/api', tags=['stt'])
@@ -10,7 +13,7 @@ app.include_router(router, prefix='/api', tags=['stt'])
 # Renderizamos el archivo index.html en la raíz de la aplicación cliente
 @app.get('/')
 def root():
-    with open('app/src/index.html', 'r') as file:
+    with open('app/src/index.html', 'r', encoding='utf-8') as file:
         html_response = file.read()
     return HTMLResponse(content = html_response)
 
@@ -26,6 +29,6 @@ async def websocket_endpoint(ws: WebSocket):
             f.write(data)
         print('Archivo de audio recibido y guardado')
         await ws.send_text('Archivo de audio guardado')
-        stt_whisper_streaming_af(file_path)
-        print('Transcripción Completada :)')
+        # stt_whisper_streaming_af(file_path)
+        stt_faster_whisper(file_path)
         

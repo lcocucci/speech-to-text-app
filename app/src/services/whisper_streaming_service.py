@@ -1,12 +1,11 @@
-import whisper
 import pyaudio
 import numpy as np
-from threading import Thread
 from datetime import datetime
 from time import time
-import warnings
+# import warnings
+from faster_whisper import WhisperModel
 
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 now = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
 
 def stt_whisper_streaming():
@@ -61,17 +60,27 @@ def stt_whisper_streaming():
         p.terminate()
         
 # Transcripción en Streaming que se procesa como un archivo de audio
-def stt_whisper_streaming_af(audiofile: str):
-    model = whisper.load_model('small')
+def stt_faster_whisper(audiofile: str):
+    model = WhisperModel("small", device="cpu", compute_type="int8")
+
     print('Inicio de Transcripción')
     start_time = time()
-    transcription = model.transcribe(audiofile, language='es')
+    
+    segments, info = model.transcribe(audiofile, language="es")
+    
+    transcription = ""
+    for segment in segments:
+        transcription += segment.text + " "
+        
     end_time = time()
     tr_duration = end_time - start_time
     print(f'Tiempo de Transcripción: {tr_duration}')
-    
-    with open(f'app\\src\\samples\\transcriptions\\stt-staf-{now}.txt', 'w', encoding='utf-8') as f:
-        f.write(transcription['text'])
+
+    now = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
+    with open(f'app\\src\\samples\\transcriptions\\staf-{now}.txt', 'w', encoding='utf-8') as f:
+        f.write(transcription)
+
+    print(f"Transcripción Completada :)")
     
 # Transcripción en Streaming que va procesando pequeños fragmentos en tiempo real
 def stt_whisper_streaming_chunks():
