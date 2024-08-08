@@ -1,4 +1,4 @@
-import pyaudio
+# import pyaudio
 import numpy as np
 from datetime import datetime
 from time import time
@@ -61,6 +61,7 @@ def stt_whisper_streaming():
         
 # Transcripción en Streaming que se procesa como un archivo de audio
 def stt_faster_whisper(audiofile: str):
+    print('Cargando modelo whisper... Esto solo demora la primera vez!')
     model = WhisperModel("small", device="cpu", compute_type="int8")
 
     print('Inicio de Transcripción')
@@ -77,7 +78,7 @@ def stt_faster_whisper(audiofile: str):
     print(f'Tiempo de Transcripción: {tr_duration}')
 
     now = datetime.now().strftime("%y-%m-%d-%H-%M-%S")
-    with open(f'app\\src\\samples\\transcriptions\\staf-{now}.txt', 'w', encoding='utf-8') as f:
+    with open(f'app/src/samples/transcriptions/staf-{now}.txt', 'w', encoding='utf-8') as f:
         f.write(transcription)
 
     print(f"Transcripción Completada :)")

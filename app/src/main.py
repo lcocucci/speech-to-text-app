@@ -1,5 +1,5 @@
 import os
-# Permitir la duplicación de la biblioteca OpenMP
+# Permitimos la duplicación de la biblioteca OpenMP
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse

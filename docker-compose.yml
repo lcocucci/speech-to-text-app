@@ -1,0 +1,11 @@
+services:
+  stt:
+    build: . # Indicamos que el Dockerfile se encuentra en el mismo directorio
+    ports:
+    - 8000:8000
+    volumes:
+      - .:/app # Montamos el directorio acuatl en /app dentro del contenedor
+    working_dir: /app # Establecemos el directorio de trabajo raíz para el contenedor
+    environment: # Cpm esto seteamos variables de entorno dentro del contenedor
+      - PYTHONUNBUFFERED=1
+    restart: always # Configuracion para que se reinicie si falla, de esta forma va a estar siempre en funcionamiento
