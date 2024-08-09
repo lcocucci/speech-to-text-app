@@ -61,7 +61,7 @@ def stt_whisper_streaming():
         
 # Transcripción en Streaming que se procesa como un archivo de audio
 def stt_faster_whisper(audiofile: str):
-    print('Cargando modelo whisper... Esto solo demora la primera vez!')
+    print('Cargando modelo whisper perrito salvaje...')
     model = WhisperModel("small", device="cpu", compute_type="int8")
 
     print('Inicio de Transcripción')

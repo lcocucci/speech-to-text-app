@@ -4,7 +4,7 @@ services:
     ports:
     - 8000:8000
     volumes:
-      - .:/app # Montamos el directorio acuatl en /app dentro del contenedor
+      - .:/app # Montamos el directorio actual en /app dentro del contenedor
     working_dir: /app # Establecemos el directorio de trabajo raíz para el contenedor
     environment: # Cpm esto seteamos variables de entorno dentro del contenedor
       - PYTHONUNBUFFERED=1
